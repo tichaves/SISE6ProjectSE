@@ -26,5 +26,22 @@ public class Services {
 
 		return account;
 	}
+	
+	public boolean accountExists(String iban) { // verifica a existencia da conta
+		return this.getAccountByIban(iban) != null;
+	}
+	
+	public boolean accountInactive(String iban) {
+		return getAccountByIban(iban).isInactive();
+	}
+	
+	public String getBankCodeByIban(String iban) {
+		return iban.substring(0, 3);
+		
+	}
+	
+	public boolean diffBanks(String sourceIban, String targetIban) {
+		return !getBankCodeByIban(sourceIban).equals(getBankCodeByIban(targetIban));
+	}
 
 }

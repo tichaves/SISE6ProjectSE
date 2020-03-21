@@ -16,10 +16,27 @@ public class Sibs {
 
 	public void transfer(String sourceIban, String targetIban, int amount)
 			throws SibsException, AccountException, OperationException {
-		this.services.withdraw(sourceIban, amount);
-
-		this.services.deposit(targetIban, amount);
-
+		if (!this.services.accountExists(sourceIban) || !this.services.accountExists(targetIban) ||
+				this.services.accountInactive(sourceIban) || this.services.accountInactive(targetIban)) {
+			throw new SibsException();
+		}
+		
+		TransferOperation operation = new TransferOperation(sourceIban, targetIban, amount);
+		
+		if (this.services.diffBanks(sourceIban, targetIban)) {
+			this.services.withdraw(sourceIban, amount + operation.commission());
+			operation.process();
+			
+			this.services.deposit(targetIban, amount);
+			operation.process();
+		} else {
+			this.services.withdraw(sourceIban, amount);
+			operation.process();
+			
+			this.services.deposit(targetIban, amount);
+			operation.process();
+		}
+		
 		addOperation(Operation.OPERATION_TRANSFER, sourceIban, targetIban, amount);
 	}
 
