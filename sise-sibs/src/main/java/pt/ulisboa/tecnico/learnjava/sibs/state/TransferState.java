@@ -1,5 +1,10 @@
 package pt.ulisboa.tecnico.learnjava.sibs.state;
 
+import pt.ulisboa.tecnico.learnjava.bank.exceptions.AccountException;
+import pt.ulisboa.tecnico.learnjava.sibs.domain.TransferOperation;
+import pt.ulisboa.tecnico.learnjava.sibs.exceptions.OperationException;
+
 public interface TransferState {
-	void process(TransferOperationState state);
+	void process(TransferOperation operation) throws OperationException, AccountException;
+	void cancel(TransferOperation operation) throws OperationException;
 }

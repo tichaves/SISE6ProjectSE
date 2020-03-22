@@ -14,6 +14,11 @@ import pt.ulisboa.tecnico.learnjava.bank.exceptions.BankException;
 import pt.ulisboa.tecnico.learnjava.bank.exceptions.ClientException;
 import pt.ulisboa.tecnico.learnjava.sibs.domain.TransferOperation;
 import pt.ulisboa.tecnico.learnjava.sibs.exceptions.OperationException;
+import pt.ulisboa.tecnico.learnjava.sibs.state.Canceled;
+import pt.ulisboa.tecnico.learnjava.sibs.state.Completed;
+import pt.ulisboa.tecnico.learnjava.sibs.state.Deposited;
+import pt.ulisboa.tecnico.learnjava.sibs.state.Registered;
+import pt.ulisboa.tecnico.learnjava.sibs.state.Withdrawn;
 
 public class TransferOperationStateTests {
 	private static final String FIRST_NAME = "Bonifacio";
@@ -57,92 +62,133 @@ public class TransferOperationStateTests {
 	@Test
 	public void transferSameBank() throws OperationException, AccountException {
 		TransferOperation operation = new TransferOperation(sourceIban, targetIbanSameBank, 100);
-		assertEquals("Registered", operation.getState());
+//		assertEquals("Registered", operation.getState());
+		assertEquals(operation.getState().getClass(), (new Registered()).getClass());
 		operation.process();
-		assertEquals("Withdrawn", operation.getState());
+//		assertEquals("Withdrawn", operation.getState());
+		assertEquals(operation.getState().getClass(), (new Withdrawn()).getClass());
 		operation.process();
-		assertEquals("Completed", operation.getState());
+//		assertEquals("Completed", operation.getState());
+		assertEquals(operation.getState().getClass(), (new Completed()).getClass());
 	}
 	
 	@Test
 	public void transferDiffBanks() throws OperationException, AccountException {
 		TransferOperation operation = new TransferOperation(sourceIban, targetIbanDiffBank, 100);
-		assertEquals("Registered", operation.getState());
+		assertEquals(operation.getState().getClass(), (new Registered()).getClass());
 		operation.process();
-		assertEquals("Withdrawn", operation.getState());
+		assertEquals(operation.getState().getClass(), (new Withdrawn()).getClass());
 		operation.process();
-		assertEquals("Deposited", operation.getState());
+		assertEquals(operation.getState().getClass(), (new Deposited()).getClass());
 		operation.process();
-		assertEquals("Completed", operation.getState());
+		assertEquals(operation.getState().getClass(), (new Completed()).getClass());
 	}
 	
 	@Test
 	public void registered2Cancel() throws OperationException, AccountException {
 		TransferOperation operation = new TransferOperation(sourceIban, targetIbanDiffBank, 100);
-		assertEquals("Registered", operation.getState());
+		assertEquals(operation.getState().getClass(), (new Registered()).getClass());
 		operation.cancel();
 		
 		try {
 			operation.process();
 			fail();
 		} catch (OperationException e) {
-			assertEquals("Canceled", operation.getState());
+			assertEquals(operation.getState().getClass(), (new Canceled()).getClass());
+			System.out.println(e.getType());
 		}
 	}
 	
 	@Test
 	public void withdrawn2Cancel() throws OperationException, AccountException {
 		TransferOperation operation = new TransferOperation(sourceIban, targetIbanDiffBank, 100);
-		assertEquals("Registered", operation.getState());
+		assertEquals(operation.getState().getClass(), (new Registered()).getClass());
 		operation.process();
-		assertEquals("Withdrawn", operation.getState());
+		assertEquals(operation.getState().getClass(), (new Withdrawn()).getClass());
 		operation.cancel();
 		
 		try {
 			operation.process();
 			fail();
 		} catch (OperationException e) {
-			assertEquals("Canceled", operation.getState());
+			assertEquals(operation.getState().getClass(), (new Canceled()).getClass());
+			System.out.println(e.getType());
 		}
 	}
 	
 	@Test
 	public void deposited2Cancel() throws OperationException, AccountException {
 		TransferOperation operation = new TransferOperation(sourceIban, targetIbanDiffBank, 100);
-		assertEquals("Registered", operation.getState());
+		assertEquals(operation.getState().getClass(), (new Registered()).getClass());
 		operation.process();
-		assertEquals("Withdrawn", operation.getState());
+		assertEquals(operation.getState().getClass(), (new Withdrawn()).getClass());
 		operation.process();
-		assertEquals("Deposited", operation.getState());
+		assertEquals(operation.getState().getClass(), (new Deposited()).getClass());
 		operation.cancel();
 		
 		try {
 			operation.process();
 			fail();
 		} catch (OperationException e) {
-			assertEquals("Canceled", operation.getState());
+			assertEquals(operation.getState().getClass(), (new Canceled()).getClass());
+			System.out.println(e.getType());
 		}
 	}
 	
 	@Test
 	public void completed2Cancel() throws OperationException, AccountException {
 		TransferOperation operation = new TransferOperation(sourceIban, targetIbanDiffBank, 100);
-		assertEquals("Registered", operation.getState());
+		assertEquals(operation.getState().getClass(), (new Registered()).getClass());
 		operation.process();
-		assertEquals("Withdrawn", operation.getState());
+		assertEquals(operation.getState().getClass(), (new Withdrawn()).getClass());
 		operation.process();
-		assertEquals("Deposited", operation.getState());
+		assertEquals(operation.getState().getClass(), (new Deposited()).getClass());
 		operation.process();
-		assertEquals("Completed", operation.getState());
+		assertEquals(operation.getState().getClass(), (new Completed()).getClass());
 		
 		try {
 			operation.cancel();
 			fail();
 		} catch (OperationException e) {
-			assertEquals("Completed", operation.getState());
+			assertEquals(operation.getState().getClass(), (new Completed()).getClass());
+			System.out.println(e.getType());
 		}
 	}
 	
+	@Test
+	public void completedTryProcess() throws OperationException, AccountException {
+		TransferOperation operation = new TransferOperation(sourceIban, targetIbanDiffBank, 100);
+		assertEquals(operation.getState().getClass(), (new Registered()).getClass());
+		operation.process();
+		assertEquals(operation.getState().getClass(), (new Withdrawn()).getClass());
+		operation.process();
+		assertEquals(operation.getState().getClass(), (new Deposited()).getClass());
+		operation.process();
+		assertEquals(operation.getState().getClass(), (new Completed()).getClass());
+		
+		try {
+			operation.process();
+			fail();
+		} catch (OperationException e) {
+			assertEquals(operation.getState().getClass(), (new Completed()).getClass());
+			System.out.println(e.getType());
+		}
+	}
+	
+	@Test
+	public void canceledTryCancel() throws OperationException, AccountException {
+		TransferOperation operation = new TransferOperation(sourceIban, targetIbanDiffBank, 100);
+		assertEquals(operation.getState().getClass(), (new Registered()).getClass());
+		operation.cancel();
+		
+		try {
+			operation.cancel();
+			fail();
+		} catch (OperationException e) {
+			assertEquals(operation.getState().getClass(), (new Canceled()).getClass());
+			System.out.println(e.getType());
+		}
+	}
 	
 	@After
 	public void tearDown() {

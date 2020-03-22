@@ -4,10 +4,10 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import pt.ulisboa.tecnico.learnjava.bank.exceptions.AccountException;
 import pt.ulisboa.tecnico.learnjava.sibs.domain.Operation;
 import pt.ulisboa.tecnico.learnjava.sibs.domain.TransferOperation;
 import pt.ulisboa.tecnico.learnjava.sibs.exceptions.OperationException;
+import pt.ulisboa.tecnico.learnjava.sibs.state.Registered;
 
 public class TransferOperationConstructorMethodTest {
 	private static final String SOURCE_IBAN = "SourceIban";
@@ -22,7 +22,8 @@ public class TransferOperationConstructorMethodTest {
 		assertEquals(100, operation.getValue());
 		assertEquals(SOURCE_IBAN, operation.getSourceIban());
 		assertEquals(TARGET_IBAN, operation.getTargetIban());
-		assertEquals("Registered", operation.getState());
+//		assertEquals("Registered", operation.getState());
+		assertEquals(operation.getState().getClass(), (new Registered()).getClass());
 	}
 
 	@Test(expected = OperationException.class)

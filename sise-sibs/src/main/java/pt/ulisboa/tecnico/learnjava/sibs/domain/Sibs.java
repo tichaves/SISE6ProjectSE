@@ -26,22 +26,43 @@ public class Sibs {
 		if (this.services.diffBanks(sourceIban, targetIban)) {
 			this.services.withdraw(sourceIban, amount + operation.commission());
 			operation.process();
-			
-			this.services.deposit(targetIban, amount);
-			operation.process();
 		} else {
 			this.services.withdraw(sourceIban, amount);
 			operation.process();
-			
-			this.services.deposit(targetIban, amount);
-			operation.process();
 		}
 		
-		addOperation(Operation.OPERATION_TRANSFER, sourceIban, targetIban, amount);
+		this.services.deposit(targetIban, amount);
+		operation.process();
+		
+		addOperation(operation);
 	}
 
-	public int addOperation(String type, String sourceIban, String targetIban, int value)
-			throws OperationException, SibsException {
+//	public int addOperation(String type, String sourceIban, String targetIban, int value)
+//			throws OperationException, SibsException {
+//		int position = -1;
+//		for (int i = 0; i < this.operations.length; i++) {
+//			if (this.operations[i] == null) {
+//				position = i;
+//				break;
+//			}
+//		}
+//
+//		if (position == -1) {
+//			throw new SibsException();
+//		}
+//
+//		Operation operation;
+//		if (type.equals(Operation.OPERATION_TRANSFER)) {
+//			operation = new TransferOperation(sourceIban, targetIban, value);
+//		} else {
+//			operation = new PaymentOperation(targetIban, value);
+//		}
+//
+//		this.operations[position] = operation;
+//		return position;
+//	}
+	
+	public int addOperation(Operation operation) throws OperationException, SibsException {
 		int position = -1;
 		for (int i = 0; i < this.operations.length; i++) {
 			if (this.operations[i] == null) {
@@ -52,13 +73,6 @@ public class Sibs {
 
 		if (position == -1) {
 			throw new SibsException();
-		}
-
-		Operation operation;
-		if (type.equals(Operation.OPERATION_TRANSFER)) {
-			operation = new TransferOperation(sourceIban, targetIban, value);
-		} else {
-			operation = new PaymentOperation(targetIban, value);
 		}
 
 		this.operations[position] = operation;

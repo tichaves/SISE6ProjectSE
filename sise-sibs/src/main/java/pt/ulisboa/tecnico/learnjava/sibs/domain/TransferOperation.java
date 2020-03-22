@@ -11,7 +11,7 @@ public class TransferOperation extends Operation {
 	private final String targetIban;
 	
 //	private String state;
-	private TransferState state;
+	private TransferState currentState;
 	private Services service;
 
 	public TransferOperation(String sourceIban, String targetIban, int value) throws OperationException {
@@ -26,7 +26,7 @@ public class TransferOperation extends Operation {
 		
 		// Part 2 - Ex.1 
 //		this.state = "Registered";
-		this.state = new Registered();
+		this.currentState = new Registered();
 		this.service = new Services();
 	}
 
@@ -35,11 +35,15 @@ public class TransferOperation extends Operation {
 	}
 	
 	public void setState(TransferState state) {
-		currentState = state;
+		this.currentState = state;
 	}
 	
 	public TransferState getState() {
-		return currentState;
+		return this.currentState;
+	}
+	
+	public Services getService() {
+		return this.service;
 	}
 
 	@Override
@@ -47,26 +51,34 @@ public class TransferOperation extends Operation {
 		return (int) Math.round(super.commission() + getValue() * 0.05);
 	}
 	
-	public void process() throws AccountException, OperationException {
-		if (this.state.equals("Canceled")) {
-			throw new OperationException("Error in process! You can not process a 'Canceled' operation.");
-		}
-		
-		if (this.state.equals("Registered")) {
-			setState("Withdrawn");
-		} else if (this.state.equals("Withdrawn") && this.service.diffBanks(this.sourceIban, this.targetIban)) {
-			setState("Deposited");
-		} else {
-			setState("Completed");
-		}
+//	public void process() throws AccountException, OperationException {
+//		if (this.state.equals("Canceled")) {
+//			throw new OperationException("Error in process! You can not process a 'Canceled' operation.");
+//		}
+//		
+//		if (this.state.equals("Registered")) {
+//			setState("Withdrawn");
+//		} else if (this.state.equals("Withdrawn") && this.service.diffBanks(this.sourceIban, this.targetIban)) {
+//			setState("Deposited");
+//		} else {
+//			setState("Completed");
+//		}
+//	}
+	
+	public void process() throws OperationException, AccountException {
+		currentState.process(this);
 	}
 	
+//	public void cancel() throws OperationException {
+//		if (this.state.equals("Completed")) {
+//			throw new OperationException("Error in cancel! You can not cancel a transfer operation in '"
+//					+ this.state + "' state.");
+//		}
+//		setState("Canceled");
+//	}
+	
 	public void cancel() throws OperationException {
-		if (this.state.equals("Completed")) {
-			throw new OperationException("Error in cancel! You can not cancel a transfer operation in '"
-					+ this.state + "' state.");
-		}
-		setState("Canceled");
+		currentState.cancel(this);
 	}
 
 	public String getSourceIban() {
@@ -77,12 +89,12 @@ public class TransferOperation extends Operation {
 		return this.targetIban;
 	}
 	
-	public String getState() {
-		return this.state;
-	}
-
-	public void setState(String state) {
-		this.state = state;
-	}
+//	public String getState() {
+//		return this.state;
+//	}
+//
+//	public void setState(String state) {
+//		this.state = state;
+//	}
 
 }

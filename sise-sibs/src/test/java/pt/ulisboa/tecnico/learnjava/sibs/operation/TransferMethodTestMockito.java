@@ -1,4 +1,4 @@
-package pt.ulisboa.tecnico.learnjava.sibs.sibs;
+package pt.ulisboa.tecnico.learnjava.sibs.operation;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
