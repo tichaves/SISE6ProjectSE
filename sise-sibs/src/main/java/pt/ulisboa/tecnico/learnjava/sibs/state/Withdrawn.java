@@ -7,8 +7,8 @@ import pt.ulisboa.tecnico.learnjava.sibs.exceptions.OperationException;
 public class Withdrawn implements TransferState {
 	@Override
 	public void process(TransferOperation operation) throws OperationException, AccountException {
-//		// Do the deposit in the account
-//		operation.getService().deposit(operation.getTargetIban(), operation.getValue());
+		// Do the deposit in the target account
+		operation.getService().deposit(operation.getTargetIban(), operation.getValue());
 		
 		// Set the next state
 		if (operation.getService().diffBanks(operation.getSourceIban(), operation.getTargetIban())) {
@@ -19,7 +19,10 @@ public class Withdrawn implements TransferState {
 	}
 	
 	@Override
-	public void cancel(TransferOperation operation) throws OperationException {
+	public void cancel(TransferOperation operation) throws OperationException, AccountException {
+		// Do the deposit in the source account
+		operation.getService().deposit(operation.getSourceIban(), operation.getValue());
+		
 		operation.setState(new Canceled());
 	}
 }

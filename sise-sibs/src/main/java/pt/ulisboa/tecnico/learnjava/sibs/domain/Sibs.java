@@ -4,6 +4,8 @@ import pt.ulisboa.tecnico.learnjava.bank.exceptions.AccountException;
 import pt.ulisboa.tecnico.learnjava.bank.services.Services;
 import pt.ulisboa.tecnico.learnjava.sibs.exceptions.OperationException;
 import pt.ulisboa.tecnico.learnjava.sibs.exceptions.SibsException;
+import pt.ulisboa.tecnico.learnjava.sibs.state.Canceled;
+import pt.ulisboa.tecnico.learnjava.sibs.state.Completed;
 
 public class Sibs {
 	final Operation[] operations;
@@ -23,18 +25,31 @@ public class Sibs {
 		
 		TransferOperation operation = new TransferOperation(sourceIban, targetIban, amount);
 		
-		if (this.services.diffBanks(sourceIban, targetIban)) {
-			this.services.withdraw(sourceIban, amount + operation.commission());
-			operation.process();
-		} else {
-			this.services.withdraw(sourceIban, amount);
-			operation.process();
+		addOperation(operation);
+	}
+	
+	public void processOperations() throws OperationException, AccountException {
+		for(Operation operation : this.operations) {
+			if(operation != null && operation.getType().equals(Operation.OPERATION_TRANSFER)) {
+				TransferOperation transfer = (TransferOperation) operation;
+				if(!(transfer.getState() instanceof Completed) && !(transfer.getState() instanceof Canceled)){
+					transfer.process();
+				}
+			}
+		}
+	}
+	
+	public void cancelOperation(int id) throws OperationException, AccountException, SibsException {
+		if (getOperation(id) == null) {
+			throw new SibsException("Error in \"cancelOperation\" method! The id " + id + " returns null.");
 		}
 		
-		this.services.deposit(targetIban, amount);
-		operation.process();
-		
-		addOperation(operation);
+		if(getOperation(id).getType().equals(Operation.OPERATION_TRANSFER)) {
+			TransferOperation transfer = (TransferOperation) getOperation(id);
+			if(!(transfer.getState() instanceof Completed) && !(transfer.getState() instanceof Canceled)){
+				transfer.cancel();
+			}
+		}
 	}
 
 //	public int addOperation(String type, String sourceIban, String targetIban, int value)
@@ -88,7 +103,8 @@ public class Sibs {
 
 	public Operation getOperation(int position) throws SibsException {
 		if (position < 0 || position > this.operations.length) {
-			throw new SibsException();
+			throw new SibsException("Error in \"cancelOperation\" method! The id " + 
+					position + " it is out of limits.");
 		}
 		return this.operations[position];
 	}

@@ -77,7 +77,7 @@ public class TransferOperation extends Operation {
 //		setState("Canceled");
 //	}
 	
-	public void cancel() throws OperationException {
+	public void cancel() throws OperationException, AccountException {
 		currentState.cancel(this);
 	}
 

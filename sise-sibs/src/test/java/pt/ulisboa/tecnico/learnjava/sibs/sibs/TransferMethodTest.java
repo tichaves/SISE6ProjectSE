@@ -18,7 +18,6 @@ import pt.ulisboa.tecnico.learnjava.sibs.domain.Sibs;
 import pt.ulisboa.tecnico.learnjava.sibs.domain.TransferOperation;
 import pt.ulisboa.tecnico.learnjava.sibs.exceptions.OperationException;
 import pt.ulisboa.tecnico.learnjava.sibs.exceptions.SibsException;
-import pt.ulisboa.tecnico.learnjava.sibs.state.Completed;
 import pt.ulisboa.tecnico.learnjava.sibs.state.Registered;
 
 public class TransferMethodTest {
@@ -42,12 +41,9 @@ public class TransferMethodTest {
 	private Services service;
 	private Sibs sibs;
 	private Bank sourceBank;
-	private Bank targetBank;
 	private Client sourceClient;
-	private Client targetClientDiffBank;
 	private Client targetClientSameBank;
 	private String sourceIban;
-	private String targetIbanDiffBank;
 	private String targetIbanSameBank;
 
 	@Before
@@ -55,27 +51,28 @@ public class TransferMethodTest {
 		this.service = new Services();
 		this.sibs = new Sibs(3, this.service);
 		this.sourceBank = new Bank("CGD");
-		this.targetBank = new Bank("BPI");
 		this.sourceClient = new Client(this.sourceBank, FIRST_NAME, LAST_NAME, NIF, PHONE_NUMBER, ADDRESS, AGE);
-		this.targetClientDiffBank = new Client(this.targetBank, FIRST_NAME_TWO, LAST_NAME_TWO, NIF_TWO, PHONE_NUMBER_TWO, ADDRESS_TWO, AGE_TWO);
 		this.targetClientSameBank = new Client(this.sourceBank, FIRST_NAME_TWO, LAST_NAME_TWO, NIF_TWO, PHONE_NUMBER_TWO, ADDRESS_TWO, AGE_TWO);
 		this.sourceIban = this.sourceBank.createAccount(Bank.AccountType.CHECKING, this.sourceClient, VALUE, 0);
-		this.targetIbanDiffBank = this.targetBank.createAccount(Bank.AccountType.CHECKING, this.targetClientDiffBank, VALUE, 0);
 		this.targetIbanSameBank = this.sourceBank.createAccount(Bank.AccountType.CHECKING, this.targetClientSameBank, VALUE, 0);
 	}
 
 	@Test
-	public void success() throws OperationException, SibsException, AccountException {
-//		int position = this.sibs.addOperation(Operation.OPERATION_TRANSFER, SOURCE_IBAN, TARGET_IBAN, VALUE);
+	public void success() throws OperationException, SibsException, AccountException, BankException, ClientException {
 		this.sibs.transfer(this.sourceIban, this.targetIbanSameBank, 100);
 		
 		assertTrue(this.sibs.getOperation(0) instanceof TransferOperation);
-		assertTrue(((TransferOperation) this.sibs.getOperation(0)).getState() instanceof Completed);
+		assertTrue(((TransferOperation) this.sibs.getOperation(0)).getState() instanceof Registered);
+        assertEquals(1, this.sibs.getNumberOfOperations());
+        assertEquals(100, this.sibs.getTotalValueOfOperations());
+        assertEquals(100, this.sibs.getTotalValueOfOperationsForType(Operation.OPERATION_TRANSFER));
+        assertEquals(0, this.sibs.getTotalValueOfOperationsForType(Operation.OPERATION_PAYMENT));
 	}
 	
 	@After
 	public void tearDown() {
 		this.sibs = null;
+		Bank.clearBanks();
 	}
 
 }

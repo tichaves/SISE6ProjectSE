@@ -7,8 +7,8 @@ import pt.ulisboa.tecnico.learnjava.sibs.exceptions.OperationException;
 public class Registered implements TransferState {
 	@Override
 	public void process(TransferOperation operation) throws OperationException, AccountException {
-//		// Do the withdraw in the account
-//		operation.getService().withdraw(operation.getSourceIban(), operation.getValue());
+		// Do the withdraw in the account
+		operation.getService().withdraw(operation.getSourceIban(), operation.getValue());
 		
 		// Set the state to withdraw
 		operation.setState(new Withdrawn());

@@ -6,5 +6,5 @@ import pt.ulisboa.tecnico.learnjava.sibs.exceptions.OperationException;
 
 public interface TransferState {
 	void process(TransferOperation operation) throws OperationException, AccountException;
-	void cancel(TransferOperation operation) throws OperationException;
+	void cancel(TransferOperation operation) throws OperationException, AccountException;
 }
