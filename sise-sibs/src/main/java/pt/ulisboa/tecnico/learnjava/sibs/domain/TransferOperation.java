@@ -12,7 +12,7 @@ public class TransferOperation extends Operation {
 	
 //	private String state;
 	private TransferState currentState;
-	private Services service;
+//	private Services service;
 
 	public TransferOperation(String sourceIban, String targetIban, int value) throws OperationException {
 		super(Operation.OPERATION_TRANSFER, value);
@@ -27,7 +27,7 @@ public class TransferOperation extends Operation {
 		// Part 2 - Ex.1 
 //		this.state = "Registered";
 		this.currentState = new Registered();
-		this.service = new Services();
+//		this.service = new Services();
 	}
 
 	private boolean invalidString(String name) {
@@ -40,10 +40,6 @@ public class TransferOperation extends Operation {
 	
 	public TransferState getState() {
 		return this.currentState;
-	}
-	
-	public Services getService() {
-		return this.service;
 	}
 
 	@Override
@@ -65,8 +61,8 @@ public class TransferOperation extends Operation {
 //		}
 //	}
 	
-	public void process() throws OperationException, AccountException {
-		currentState.process(this);
+	public void process(Services service) throws OperationException, AccountException {
+		currentState.process(this, service);
 	}
 	
 //	public void cancel() throws OperationException {
@@ -77,8 +73,8 @@ public class TransferOperation extends Operation {
 //		setState("Canceled");
 //	}
 	
-	public void cancel() throws OperationException, AccountException {
-		currentState.cancel(this);
+	public void cancel(Services service) throws OperationException, AccountException {
+		currentState.cancel(this, service);
 	}
 
 	public String getSourceIban() {

@@ -6,6 +6,8 @@ import pt.ulisboa.tecnico.learnjava.sibs.exceptions.OperationException;
 import pt.ulisboa.tecnico.learnjava.sibs.exceptions.SibsException;
 import pt.ulisboa.tecnico.learnjava.sibs.state.Canceled;
 import pt.ulisboa.tecnico.learnjava.sibs.state.Completed;
+import pt.ulisboa.tecnico.learnjava.sibs.state.Retry;
+import pt.ulisboa.tecnico.learnjava.sibs.state.Error;
 
 public class Sibs {
 	final Operation[] operations;
@@ -32,10 +34,21 @@ public class Sibs {
 		for(Operation operation : this.operations) {
 			if(operation != null && operation.getType().equals(Operation.OPERATION_TRANSFER)) {
 				TransferOperation transfer = (TransferOperation) operation;
-				if(!(transfer.getState() instanceof Completed) && !(transfer.getState() instanceof Canceled)){
-					transfer.process();
+				if(nonFinalState(transfer)){
+					tryProcess(transfer);
 				}
 			}
+		}
+	}
+	
+	public void tryProcess(TransferOperation transfer) throws AccountException, OperationException {
+		try {
+			transfer.process(services);
+		} catch (Exception e) {
+			if (!(transfer.getState() instanceof Retry)) {
+				(new Retry()).process(transfer, services);
+			}
+			System.out.println("The operation x failed.");// You have more " + transfer.getState().getLifes + " tries.");
 		}
 	}
 	
@@ -46,10 +59,16 @@ public class Sibs {
 		
 		if(getOperation(id).getType().equals(Operation.OPERATION_TRANSFER)) {
 			TransferOperation transfer = (TransferOperation) getOperation(id);
-			if(!(transfer.getState() instanceof Completed) && !(transfer.getState() instanceof Canceled)){
-				transfer.cancel();
+			if(nonFinalState(transfer)){
+				transfer.cancel(this.services);
 			}
 		}
+	}
+	
+	public boolean nonFinalState(TransferOperation transfer) {
+		return !(transfer.getState() instanceof Completed) 
+				&& !(transfer.getState() instanceof Canceled)
+				&& !(transfer.getState() instanceof Error);
 	}
 
 //	public int addOperation(String type, String sourceIban, String targetIban, int value)

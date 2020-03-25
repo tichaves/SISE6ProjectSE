@@ -5,18 +5,18 @@ import pt.ulisboa.tecnico.learnjava.bank.services.Services;
 import pt.ulisboa.tecnico.learnjava.sibs.domain.TransferOperation;
 import pt.ulisboa.tecnico.learnjava.sibs.exceptions.OperationException;
 
-public class Registered implements TransferState {
+public class Error implements TransferState {
+
 	@Override
 	public void process(TransferOperation operation, Services service) throws OperationException, AccountException {
-		// Do the withdraw in the account
-		service.withdraw(operation.getSourceIban(), operation.getValue());
-		
-		// Set the state to withdraw
-		operation.setState(new Withdrawn());
+		throw new OperationException("Error in \"process\" method! You can not process an operation "
+				+ "in the state \"Error\".");
 	}
-	
+
 	@Override
-	public void cancel(TransferOperation operation, Services service) throws OperationException {
-		operation.setState(new Canceled());
+	public void cancel(TransferOperation operation, Services service) throws OperationException, AccountException {
+		throw new OperationException("Error in \"cancel\" method! You can not cancel an operation "
+				+ "in the state \"Error\".");
 	}
+
 }
