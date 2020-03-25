@@ -17,15 +17,9 @@ public class Retry implements TransferState {
 			operation.setState(this);
 		} else {
 			if (lifes > 0) {
-				
-				try {
-					this.previewState.process(operation, service);
-				} catch (Exception e) {
-					// TODO: handle exception
-//					this.lifes -= 1;
-				}
-				
+				processPreviewState(operation, service);
 			} else {
+				this.previewState.cancel(operation, service);
 				operation.setState(new Error());
 			}
 		}
@@ -38,11 +32,11 @@ public class Retry implements TransferState {
 		this.previewState.cancel(operation, service);
 	}
 	
-	public int getLifes() {
-		return this.lifes;
-	}
-	
-	public TransferState getPreviewsState() {
-		return this.previewState;
+	public void processPreviewState(TransferOperation operation, Services service) {
+		try {
+			this.previewState.process(operation, service);
+		} catch (Exception e) {
+			System.out.println("Retry process.");
+		}
 	}
 }

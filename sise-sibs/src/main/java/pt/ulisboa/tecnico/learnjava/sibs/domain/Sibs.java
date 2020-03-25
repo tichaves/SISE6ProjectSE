@@ -48,7 +48,6 @@ public class Sibs {
 			if (!(transfer.getState() instanceof Retry)) {
 				(new Retry()).process(transfer, services);
 			}
-			System.out.println("The operation x failed.");// You have more " + transfer.getState().getLifes + " tries.");
 		}
 	}
 	
@@ -71,31 +70,6 @@ public class Sibs {
 				&& !(transfer.getState() instanceof Error);
 	}
 
-//	public int addOperation(String type, String sourceIban, String targetIban, int value)
-//			throws OperationException, SibsException {
-//		int position = -1;
-//		for (int i = 0; i < this.operations.length; i++) {
-//			if (this.operations[i] == null) {
-//				position = i;
-//				break;
-//			}
-//		}
-//
-//		if (position == -1) {
-//			throw new SibsException();
-//		}
-//
-//		Operation operation;
-//		if (type.equals(Operation.OPERATION_TRANSFER)) {
-//			operation = new TransferOperation(sourceIban, targetIban, value);
-//		} else {
-//			operation = new PaymentOperation(targetIban, value);
-//		}
-//
-//		this.operations[position] = operation;
-//		return position;
-//	}
-	
 	public int addOperation(Operation operation) throws OperationException, SibsException {
 		int position = -1;
 		for (int i = 0; i < this.operations.length; i++) {

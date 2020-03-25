@@ -24,9 +24,9 @@ public class TransferMethodTestMockito {
 	 private static final String TARGET_IBAN = "FGHIJ";
 	 private static final int COMISSION = 6;
 	 
-	 @Test //SUCCESS - 4 - Transfer between two accounts in the same bank (without fees)
-	 public void success() throws BankException, AccountException, SibsException, OperationException, ClientException {
-		 Services servicesMock = mock(Services.class); // start a mock of Service class
+	 @Test
+	 public void successSameBanks() throws BankException, AccountException, SibsException, OperationException, ClientException {
+		 Services servicesMock = mock(Services.class);
 		 this.sibs = new Sibs(3, servicesMock);
 		 
 		 when(servicesMock.accountExists(SOURCE_IBAN)).thenReturn(true);
@@ -50,7 +50,7 @@ public class TransferMethodTestMockito {
 		 
 	 }
 	    
-	 @Test //SUCCESS DIFFERENT BANKS- 5 - Transfer between two accounts in different banks (with fees)
+	 @Test
 	 public void successDifferentBanks() throws BankException, AccountException, SibsException, OperationException, ClientException {
 		 Services servicesMock= mock(Services.class); 
 		 this.sibs = new Sibs(3, servicesMock);
@@ -78,7 +78,7 @@ public class TransferMethodTestMockito {
 		 
 	 }
 	    
-	 @Test // Transfer for an inexistent account - 6
+	 @Test
 	 public void accountSourceExists() throws SibsException, AccountException, OperationException {
 		 Services servicesMock = mock(Services.class); 
 		 this.sibs = new Sibs(3, servicesMock);
@@ -95,9 +95,9 @@ public class TransferMethodTestMockito {
 		 }
 	 }
 	    
-	 @Test // Transfer for an inactive account - 6
+	 @Test
 	 public void accountTargetInactive() throws SibsException, AccountException, OperationException {
-		 Services servicesMock = mock(Services.class); //criar um mock e passa-lo a classe Sibs
+		 Services servicesMock = mock(Services.class);
 		 this.sibs = new Sibs(3, servicesMock);
 	    
 		 when(servicesMock.accountExists(SOURCE_IBAN)).thenReturn(true);

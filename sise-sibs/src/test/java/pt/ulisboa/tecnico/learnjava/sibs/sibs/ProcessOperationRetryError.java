@@ -1,5 +1,6 @@
 package pt.ulisboa.tecnico.learnjava.sibs.sibs;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.After;
@@ -16,9 +17,10 @@ import pt.ulisboa.tecnico.learnjava.sibs.domain.Sibs;
 import pt.ulisboa.tecnico.learnjava.sibs.domain.TransferOperation;
 import pt.ulisboa.tecnico.learnjava.sibs.exceptions.OperationException;
 import pt.ulisboa.tecnico.learnjava.sibs.exceptions.SibsException;
-import pt.ulisboa.tecnico.learnjava.sibs.state.Registered;
 import pt.ulisboa.tecnico.learnjava.sibs.state.Retry;
+import pt.ulisboa.tecnico.learnjava.sibs.state.Withdrawn;
 import pt.ulisboa.tecnico.learnjava.sibs.state.Canceled;
+import pt.ulisboa.tecnico.learnjava.sibs.state.Deposited;
 import pt.ulisboa.tecnico.learnjava.sibs.state.Error;
 
 public class ProcessOperationRetryError {
@@ -69,16 +71,10 @@ public class ProcessOperationRetryError {
 		
 		this.sibs.processOperations();
 		assertTrue(((TransferOperation) this.sibs.getOperation(0)).getState() instanceof Retry);
-		System.out.println(((Retry) ((TransferOperation) this.sibs.getOperation(0)).getState()).getLifes());
-		System.out.println(((Retry) ((TransferOperation) this.sibs.getOperation(0)).getState()).getPreviewsState() instanceof Registered);
 		this.sibs.processOperations();
 		assertTrue(((TransferOperation) this.sibs.getOperation(0)).getState() instanceof Retry);
-		System.out.println(((Retry) ((TransferOperation) this.sibs.getOperation(0)).getState()).getLifes());
-		System.out.println(((Retry) ((TransferOperation) this.sibs.getOperation(0)).getState()).getPreviewsState() instanceof Registered);
 		this.sibs.processOperations();
 		assertTrue(((TransferOperation) this.sibs.getOperation(0)).getState() instanceof Retry);
-		System.out.println(((Retry) ((TransferOperation) this.sibs.getOperation(0)).getState()).getLifes());
-		System.out.println(((Retry) ((TransferOperation) this.sibs.getOperation(0)).getState()).getPreviewsState() instanceof Registered);
 		this.sibs.processOperations();
 		assertTrue(((TransferOperation) this.sibs.getOperation(0)).getState() instanceof Error);
 
@@ -142,9 +138,29 @@ public class ProcessOperationRetryError {
 		
 	}
 	
-	
-	
-	
+	@Test
+	public void processDepositedError() throws OperationException, SibsException, AccountException {
+		this.sibs.transfer(this.sourceIban, this.targetIbanDiffBank, 1000);
+		
+		this.sibs.processOperations();
+		assertTrue(((TransferOperation) this.sibs.getOperation(0)).getState() instanceof Withdrawn);
+		assertEquals(0, this.service.getAccountByIban(this.sourceIban).getBalance());
+		this.sibs.processOperations();
+		assertTrue(((TransferOperation) this.sibs.getOperation(0)).getState() instanceof Deposited);
+		assertEquals(2000, this.service.getAccountByIban(this.targetIbanDiffBank).getBalance());
+		this.sibs.processOperations();
+		assertTrue(((TransferOperation) this.sibs.getOperation(0)).getState() instanceof Retry);
+		this.sibs.processOperations();
+		assertTrue(((TransferOperation) this.sibs.getOperation(0)).getState() instanceof Retry);
+		this.sibs.processOperations();
+		assertTrue(((TransferOperation) this.sibs.getOperation(0)).getState() instanceof Retry);
+		this.sibs.processOperations();
+		assertTrue(((TransferOperation) this.sibs.getOperation(0)).getState() instanceof Error);
+		
+		assertEquals(1000, this.service.getAccountByIban(this.sourceIban).getBalance());
+		assertEquals(1000, this.service.getAccountByIban(this.targetIbanDiffBank).getBalance());
+
+	}
 	
 	@After
 	public void tearDown() {
