@@ -1,42 +1,62 @@
 package pt.ulisboa.tecnico.learnjava.sibs.mbway;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
+import pt.ulisboa.tecnico.learnjava.sibs.domain.MBWay;
+
 public class MBWayModel {
+	private MBWay mbway;
 	private String phoneNumber;
 	private String userIban;
+//	private MBWayAccount mbWayAccount;
+//	private Services service = new Services();
+	
+//	private String code;
 	
 //	private HashMap<String, Set<String>> myMBWay = new HashMap<>();
-	private Set<String> ibans = new HashSet<>();
+//	private Set<String> ibans = new HashSet<>();
 	
 	private Set<String> friendsPhones = new HashSet<>();
 	
-	public boolean setValues(String phoneNumber, String iban) {
-		setPhoneNumber(phoneNumber);
+	public MBWayModel(MBWay mbway) {
+		this.mbway = mbway;
+	}
+
+	public String setValues(String phoneNumber, String userIban) {
+		this.phoneNumber = phoneNumber;
+		this.userIban = userIban;
 		
-		this.ibans.add(iban);
-		this.myMBWay.put(phoneNumber, this.ibans);
+		return mbway.setValues(phoneNumber, userIban);
 	}
 	
 	public String getPhoneNumber() {
-		return phoneNumber;
+		return this.phoneNumber;
 	}
 	
-	public String getUserIban() {
-		return userIban;
+	public MBWay getMBWay() {
+		return this.mbway;
 	}
 	
-	public void setPhoneNumber(String phoneNumber) {
-		if (!myMBWay.containsKey(phoneNumber)) {
-			this.phoneNumber = phoneNumber;
-			myMBWay.put(this.phoneNumber, ibans);
-		}
+//	public String getUserIban() {
+//		return this.mbWayAccount.getIban();
+//	}
+	
+//	public boolean setUserIban(String userIban) {
+//		return this.ibans.add(userIban);
+//	}
+	
+
+	public Boolean confirmCode(String code) {
+		return this.mbway.confirmCode(this.phoneNumber, this.userIban, code);
 	}
 	
-	public boolean setUserIban(String userIban) {
-		return this.ibans.add(userIban);
+	public Boolean isActive(String phoneNumber) {
+		return mbway.activeMbWayAccount(phoneNumber);
+	}
+
+	public int getBalance(String sourcePhNumber) {
+		return this.mbway.getBalance(sourcePhNumber);
 	}
 	
 }

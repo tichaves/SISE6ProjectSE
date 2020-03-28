@@ -10,8 +10,8 @@ import pt.ulisboa.tecnico.learnjava.sibs.state.Retry;
 import pt.ulisboa.tecnico.learnjava.sibs.state.Error;
 
 public class Sibs {
-	final Operation[] operations;
-	Services services;
+	private final Operation[] operations;
+	private Services services;
 
 	public Sibs(int maxNumberOfOperations, Services services) {
 		this.operations = new Operation[maxNumberOfOperations];
