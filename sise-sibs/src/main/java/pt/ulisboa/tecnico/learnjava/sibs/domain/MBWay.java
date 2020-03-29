@@ -40,6 +40,10 @@ public class MBWay {
 	public int getBalance(String sourcePhNumber) {
 		return this.users.get(sourcePhNumber).getAccount().getBalance();
 	}
+	
+	public MBWayAccount getMBWayAccount(String iban) {
+		return this.users.get(iban);
+	}
 
 	public void transfer(String sourcePhNumber, String targetPhNumber, int amount) throws SibsException, AccountException, OperationException {
 		String sourceIban = this.users.get(sourcePhNumber).getIban();

@@ -29,7 +29,7 @@ public class MBWayAccount {
 //		this.account = account;
 //	}
 	
-	public void setActive() {
+	protected void setActive() {
 		this.active = true;
 	}
 	

@@ -112,7 +112,7 @@ public class MBWayController {
 		while(true) {
 			String[] inputs = userInput(myObj.nextLine());;
 			switch(inputs[0]) {
-			case "friends":
+			case "friend":
 				if (!model.isActive(inputs[1])) {
 					view.printUserMessage("Friend " + inputs[1] + " is not registered.");
 					continue;

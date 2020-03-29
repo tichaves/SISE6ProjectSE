@@ -9,7 +9,6 @@ import pt.ulisboa.tecnico.learnjava.bank.exceptions.AccountException;
 import pt.ulisboa.tecnico.learnjava.bank.exceptions.BankException;
 import pt.ulisboa.tecnico.learnjava.bank.exceptions.ClientException;
 import pt.ulisboa.tecnico.learnjava.sibs.domain.MBWay;
-import pt.ulisboa.tecnico.learnjava.sibs.domain.MBWayAccount;
 import pt.ulisboa.tecnico.learnjava.sibs.exceptions.OperationException;
 import pt.ulisboa.tecnico.learnjava.sibs.exceptions.SibsException;
 
@@ -78,18 +77,24 @@ public class MBWayInterface {
 	
 	private static void retriveDataFromDatabase() throws BankException, ClientException, AccountException {
 		Bank bank = new Bank("cgd");
+		Client eu = new Client(bank, "Eu", "Pessoa", "212121314", "999999999", "Viaduto Duarte Pacheco", 29);
 		Client client1 = new Client(bank, "Bonifacio", "Jacobino", "123456789", "966696669", "Algures perdido", 24);
 		Client client2 = new Client(bank, "Aquilino", "Andarilho", "012345678", "933393336", "Algures procurando", 29);
 		Client client3 = new Client(bank, "Felizmino", "Tristemino", "233223323", "965432198", "Rua d'Ele", 25);
+		String iban = bank.createAccount(AccountType.CHECKING, eu, 1000, 1000);
 		String iban1 = bank.createAccount(AccountType.CHECKING, client1, 1000, 1000);
 		String iban2 = bank.createAccount(AccountType.CHECKING, client2, 1000, 1000);
 		String iban3 = bank.createAccount(AccountType.CHECKING, client3, 1000, 1000);
-		MBWayAccount account1 = new MBWayAccount(iban1, bank.getAccountByAccountId(iban1.substring(3)));
-		MBWayAccount account2 = new MBWayAccount(iban2, bank.getAccountByAccountId(iban2.substring(3)));
-		MBWayAccount account3 = new MBWayAccount(iban3, bank.getAccountByAccountId(iban3.substring(3)));
-		account1.setActive();
-		account2.setActive();
-		account3.setActive();
+//		MBWayAccount account1 = new MBWayAccount(iban1, bank.getAccountByAccountId(iban1.substring(3)));
+//		MBWayAccount account2 = new MBWayAccount(iban2, bank.getAccountByAccountId(iban2.substring(3)));
+//		MBWayAccount account3 = new MBWayAccount(iban3, bank.getAccountByAccountId(iban3.substring(3)));
+		String code1 = MBWAY.setValues("966696669", iban1);
+		String code2 = MBWAY.setValues("933393336", iban2);
+		String code3 = MBWAY.setValues("965432198", iban3);
+		MBWAY.confirmCode("966696669", iban1, code1);
+		MBWAY.confirmCode("933393336", iban2, code2);
+//		MBWAY.confirmCode("965432198", iban3, code3);
+		System.out.println(iban);
 //		MBWay mbway = new MBWay("962770474", account1);
 //		mbway.addFriend("912345678", account2);
 //		mbway.addFriend("931234567", account3);
