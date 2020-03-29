@@ -21,7 +21,6 @@ public class GetNumberOfOperationsMethodTest {
 	@Before
 	public void setUp() throws OperationException, SibsException {
 		this.sibs = new Sibs(3, new Services());
-//		this.sibs.addOperation(Operation.OPERATION_PAYMENT, null, TARGET_IBAN, VALUE);
 		this.sibs.addOperation(new PaymentOperation(TARGET_IBAN, VALUE));
 	}
 
