@@ -15,43 +15,9 @@ import pt.ulisboa.tecnico.learnjava.sibs.exceptions.SibsException;
 public class MBWayInterface {
 	public static MBWay MBWAY = new MBWay();
 	
-//	public HashMap<Integer, User> users = new HashMap<Integer, User>();
-	
-//	public static void main(String[] args)  
-//    { 
-//        User model  = retriveStudentFromDatabase(); 
-//  
-//        UserView view = new UserView(); 
-//  
-//        UserController controller = new UserController(model, view); 
-//  
-//        controller.updateView(); 
-//  
-//        controller.setStudentName("Vikram Sharma"); 
-//  
-//        controller.updateView(); 
-//    } 
-//  
-//    private static User retriveUserFromDatabase() 
-//    { 
-//        User user = new User(); 
-//        student.setName("Lokesh Sharma"); 
-//        student.setRollNo("15UCS157"); 
-//        return student; 
-//    } 
-	
-//  
-//  private static MBWayModel retriveUser(String userIban, String phoneNumber) { 
-//      MBWayModel user = new MBWayModel(); 
-//      user.setUserIban(userIban);
-//      user.setPhoneNumber(phoneNumber); 
-//      return user; 
-//  } 
-	
 	public static void main(String[] args) throws NumberFormatException, SibsException, AccountException, OperationException, BankException, ClientException {
 		
 		//fetch student record based on his roll no from the database
-//		User model  = retriveUserFromDatabase();
 		retriveDataFromDatabase();
 		MBWayModel model = new MBWayModel(MBWAY);
 
@@ -68,8 +34,6 @@ public class MBWayInterface {
 			
 			String input = myObj.nextLine(); // Read user input
 			
-//			controller.userInput(input);
-			
 			controller.updateView(input);
 		}
 		myObj.close();
@@ -85,9 +49,6 @@ public class MBWayInterface {
 		String iban1 = bank.createAccount(AccountType.CHECKING, client1, 1000, 1000);
 		String iban2 = bank.createAccount(AccountType.CHECKING, client2, 1000, 1000);
 		String iban3 = bank.createAccount(AccountType.CHECKING, client3, 1000, 1000);
-//		MBWayAccount account1 = new MBWayAccount(iban1, bank.getAccountByAccountId(iban1.substring(3)));
-//		MBWayAccount account2 = new MBWayAccount(iban2, bank.getAccountByAccountId(iban2.substring(3)));
-//		MBWayAccount account3 = new MBWayAccount(iban3, bank.getAccountByAccountId(iban3.substring(3)));
 		String code1 = MBWAY.setValues("966696669", iban1);
 		String code2 = MBWAY.setValues("933393336", iban2);
 		String code3 = MBWAY.setValues("965432198", iban3);
@@ -98,7 +59,6 @@ public class MBWayInterface {
 //		MBWay mbway = new MBWay("962770474", account1);
 //		mbway.addFriend("912345678", account2);
 //		mbway.addFriend("931234567", account3);
-//		return mbway;
 
 	}
 

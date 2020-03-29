@@ -43,9 +43,7 @@ public class MBWayController {
 			transferMbWay(inputs[1], inputs[2], Integer.parseInt(inputs[3]));
 		
 			break;
-		
-//		case "mbway-split-bill":
-//			splitBill(Integer.parseInt(inputs[1]), Integer.parseInt(inputs[2]));
+
 		case "friend":
 			
 			enterFriends(inputs[1], Integer.parseInt(inputs[2]));
@@ -107,8 +105,6 @@ public class MBWayController {
 		HashMap<String, Integer> friendNAmount = new HashMap<>();
 		friendNAmount.put(phoneNumber, amount);
 		view.printUserMessage("Enter your friends (split bill command to finish):");
-//		Boolean isTrue = true;
-//		view.printUserMessage("Enter your friends data (\"end\" to finish):");
 		while(true) {
 			String[] inputs = userInput(myObj.nextLine());;
 			switch(inputs[0]) {

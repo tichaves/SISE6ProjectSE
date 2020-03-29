@@ -24,11 +24,6 @@ public class MBWayAccount {
 		return iban;
 	}
 	
-//	public void setValues(String iban, Account account) {
-//		this.iban = iban;
-//		this.account = account;
-//	}
-	
 	protected void setActive() {
 		this.active = true;
 	}
