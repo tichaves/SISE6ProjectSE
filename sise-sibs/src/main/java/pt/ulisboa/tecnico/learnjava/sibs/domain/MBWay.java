@@ -34,7 +34,11 @@ public class MBWay {
 	}
 
 	public Boolean activeMbWayAccount(String phoneNumber) {
-		return this.users.get(phoneNumber).isActive();
+		try {
+			return this.users.get(phoneNumber).isActive();
+		} catch (Exception e) {
+			return false;
+		}
 	}
 
 	public int getBalance(String sourcePhNumber) {

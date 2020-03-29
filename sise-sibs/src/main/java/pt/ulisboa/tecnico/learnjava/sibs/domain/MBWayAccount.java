@@ -28,7 +28,13 @@ public class MBWayAccount {
 		this.active = true;
 	}
 	
-	public Boolean isActive() {
+	public boolean isActive() {
+//		boolean active;
+//		try {
+//			active = this.active;
+//		} catch (Exception e) {
+//			active = false;
+//		}
 		return this.active;
 	}
 	

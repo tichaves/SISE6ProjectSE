@@ -19,7 +19,7 @@ public class MBWayInterface {
 		
 		//fetch student record based on his roll no from the database
 		retriveDataFromDatabase();
-		MBWayModel model = new MBWayModel(MBWAY);
+		MBWayModel model = new MBWayModel();
 
 		//Create a view : to write student details on console
 		MBWayView view = new MBWayView();
@@ -54,11 +54,6 @@ public class MBWayInterface {
 		String code3 = MBWAY.setValues("965432198", iban3);
 		MBWAY.confirmCode("966696669", iban1, code1);
 		MBWAY.confirmCode("933393336", iban2, code2);
-//		MBWAY.confirmCode("965432198", iban3, code3);
-		System.out.println(iban);
-//		MBWay mbway = new MBWay("962770474", account1);
-//		mbway.addFriend("912345678", account2);
-//		mbway.addFriend("931234567", account3);
 
 	}
 

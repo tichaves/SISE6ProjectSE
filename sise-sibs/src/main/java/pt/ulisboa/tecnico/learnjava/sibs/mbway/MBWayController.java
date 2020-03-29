@@ -29,7 +29,7 @@ public class MBWayController {
 		case "associate-mbway":
 			
 			associateMbWay(inputs[1], inputs[2]);
-		
+			
 			break;
 	
 		case "confirm-mbway":
@@ -52,13 +52,15 @@ public class MBWayController {
 		
 		case "exit": // Finish actions
 			turnOff();
-			view.printUserMessage("You exit the app.");
+			this.message = ("You exit the app.");
 			break;
 		
 		default:
-			view.printUserMessage("Invalid action!");
+
+			this.message = ("Invalid action!");
 	
 		}
+		view.printUserMessage(this.message);
 	}
 
 	public String[] userInput(String input) {
@@ -74,9 +76,12 @@ public class MBWayController {
 	}
 	
 	public void associateMbWay(String phoneNumber, String userIban) {
-		this.message = ("Code: " + model.setValues(userIban, phoneNumber)
-			+ " (don’t share it with anyone)");
-		view.printUserMessage(this.message);
+		try {
+			this.message = "Code: " + model.setValues(userIban, phoneNumber)
+				+ " (don’t share it with anyone)";
+		} catch (Exception e) {
+			this.message = "Error in \"associateMBWay\"! This Iban does not exist.";
+		}
 	}
 	
 	public void confirmMbWay(String code) {
@@ -84,12 +89,10 @@ public class MBWayController {
 		if (model.confirmCode(code)) {
 			this.message = "MBWAY association confirmed successfully!";
 		}
-		
-		view.printUserMessage(this.message);
 	}
 	
 	public void transferMbWay(String sourcePhNumber, String targetPhNumber, int amount) throws SibsException, AccountException, OperationException {
-		if(!(model.getPhoneNumber().equals(sourcePhNumber) || model.isActive(targetPhNumber))) {
+		if(!model.getPhoneNumber().equals(sourcePhNumber) || !model.isActive(targetPhNumber)) {
 			this.message = "Wrong phone number.";
 		} else if(model.getBalance(sourcePhNumber) < amount) {
 			this.message = "Not enough money on the source account.";
@@ -97,15 +100,23 @@ public class MBWayController {
 			model.getMBWay().transfer(sourcePhNumber, targetPhNumber, amount);
 			this.message = "Transfer performed successfully!";
 		}
-		view.printUserMessage(this.message);
 	}
 	
 	private void enterFriends(String phoneNumber, int amount) throws NumberFormatException, SibsException, AccountException, OperationException {
+		if (!phoneNumber.equals(model.getPhoneNumber())) {
+			view.printUserMessage("The user phone number it is not correct!");
+		} else {
+			runfriends(phoneNumber, amount);
+		}
+	}
+	
+	private void runfriends(String phoneNumber, int amount) throws NumberFormatException, SibsException, AccountException, OperationException {
 		Scanner myObj = new Scanner(System.in);
 		HashMap<String, Integer> friendNAmount = new HashMap<>();
 		friendNAmount.put(phoneNumber, amount);
 		view.printUserMessage("Enter your friends (split bill command to finish):");
-		while(true) {
+		boolean isTrue = true;
+		while(isTrue) {
 			String[] inputs = userInput(myObj.nextLine());;
 			switch(inputs[0]) {
 			case "friend":
@@ -118,6 +129,7 @@ public class MBWayController {
 				
 			case "mbway-split-bill":
 				splitBill(Integer.parseInt(inputs[1]), Integer.parseInt(inputs[2]), friendNAmount);
+				isTrue = false;
 				break;
 			
 			default:
@@ -134,28 +146,26 @@ public class MBWayController {
 			sumAmounts += value;
 		}
 		friendNAmount.remove(model.getPhoneNumber());
-		if (numbFriends < friendSize) {
-			view.printUserMessage("Oh no! " + friendSize + " friend(s) are missing.");
-		} else if (numbFriends > friendSize) {
-			view.printUserMessage("Oh no! Too many friends.");
+		if (numbFriends > friendSize) {
+			this.message = ("Oh no! " + (numbFriends - friendSize) + " friend(s) are missing.");
+		} else if (numbFriends < friendSize) {
+			this.message = ("Oh no! Too many friends.");
 		} else if (totalAmount != sumAmounts) {
-			view.printUserMessage("Something is wrong. Did you set the bill amount right?");
+			this.message = ("Something is wrong. Did you set the bill amount right?");
 		} else {
 			if (allHaveMoney(friendNAmount)) {
 				for (String friend : friendNAmount.keySet()) {
 					transferMbWay(friend, model.getPhoneNumber(), friendNAmount.get(friend));
 				}
-				view.printUserMessage("Bill payed successfully!");
+				this.message = ("Bill payed successfully!");
 			}
-			
 		}
-		
 	}
 
 	private boolean allHaveMoney(HashMap<String, Integer> friendNAmount) {
 		for (String friend : friendNAmount.keySet()) {
 			if (model.getBalance(friend) < friendNAmount.get(friend)) {
-				view.printUserMessage("Oh no! One friend does not have money to pay!");
+				this.message = ("Oh no! One friend does not have money to pay!");
 				return false;
 			}
 		}

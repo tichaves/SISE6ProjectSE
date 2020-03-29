@@ -43,7 +43,7 @@ public class ConstructorMethodTest {
 			new CheckingAccount(null, AMOUNT);
 			fail();
 		} catch (AccountException e) {
-			// passes
+			System.out.println("Error! Client can't be null.");
 		}
 	}
 

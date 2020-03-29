@@ -3,13 +3,9 @@ package pt.ulisboa.tecnico.learnjava.sibs.mbway;
 import pt.ulisboa.tecnico.learnjava.sibs.domain.MBWay;
 
 public class MBWayModel {
-	private MBWay mbway;
+	private MBWay mbway = MBWayInterface.MBWAY;
 	private String phoneNumber;
 	private String userIban;
-	
-	public MBWayModel(MBWay mbway) {
-		this.mbway = mbway;
-	}
 
 	public String setValues(String phoneNumber, String userIban) {
 		this.phoneNumber = phoneNumber;
