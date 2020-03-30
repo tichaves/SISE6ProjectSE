@@ -153,10 +153,8 @@ public class MBWayController {
 			sumAmounts += value;
 		}
 		friendNAmount.remove(model.getPhoneNumber());
-		if (numbFriends > friendSize) {
-			this.message = ("Oh no! " + (numbFriends - friendSize) + " friend(s) are missing.");
-		} else if (numbFriends < friendSize) {
-			this.message = ("Oh no! Too many friends.");
+		if (numbFriends != friendSize) {
+			friendsWrongSize(numbFriends, friendSize);
 		} else if (totalAmount != sumAmounts) {
 			this.message = ("Something is wrong. Did you set the bill amount right?");
 		} else {
@@ -166,6 +164,14 @@ public class MBWayController {
 				}
 				this.message = ("Bill payed successfully!");
 			}
+		}
+	}
+	
+	private void friendsWrongSize(int numbFriends, int friendSize) {
+		if (numbFriends > friendSize) {
+			this.message = ("Oh no! " + (numbFriends - friendSize) + " friend(s) are missing.");
+		} else {
+			this.message = ("Oh no! Too many friends.");
 		}
 	}
 
