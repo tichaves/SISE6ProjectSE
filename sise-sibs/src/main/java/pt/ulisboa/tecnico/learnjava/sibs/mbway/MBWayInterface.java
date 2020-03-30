@@ -39,6 +39,7 @@ public class MBWayInterface {
 		myObj.close();
 	}
 	
+	// Refactor for Write Short Units of Code - line 55
 	private static void retriveDataFromDatabase() throws BankException, ClientException, AccountException {
 		Bank bank = new Bank("cgd");
 		Client eu = new Client(bank, "Eu", "Pessoa", "212121314", "999999999", "Viaduto Duarte Pacheco", 29);
@@ -51,10 +52,8 @@ public class MBWayInterface {
 		String iban3 = bank.createAccount(AccountType.CHECKING, client3, 1000, 1000);
 		String code1 = MBWAY.setValues("966696669", iban1);
 		String code2 = MBWAY.setValues("933393336", iban2);
-		String code3 = MBWAY.setValues("965432198", iban3);
 		MBWAY.confirmCode("966696669", iban1, code1);
 		MBWAY.confirmCode("933393336", iban2, code2);
-
 	}
 
 }

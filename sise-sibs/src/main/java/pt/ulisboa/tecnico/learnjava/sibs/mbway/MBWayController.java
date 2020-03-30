@@ -107,13 +107,12 @@ public class MBWayController {
 		if (!phoneNumber.equals(model.getPhoneNumber())) {
 			view.printUserMessage("The user phone number it is not correct!");
 		} else {
-			// Refactor for Write Short Units of Code - line 110 to line 118
+			// Refactor for Write Short Units of Code - line 110 to line 115
 			Scanner myObj = new Scanner(System.in);
 			HashMap<String, Integer> friendNAmount = new HashMap<>();
 			friendNAmount.put(phoneNumber, amount);
 			view.printUserMessage("Enter your friends (split bill command to finish):");
 			runFriends(myObj, friendNAmount);
-			
 		}
 	}
 	
@@ -123,11 +122,6 @@ public class MBWayController {
 			String[] inputs = userInput(myObj.nextLine());;
 			switch(inputs[0]) {
 			case "friend":
-//				if (!model.isActive(inputs[1])) {
-//					view.printUserMessage("Friend " + inputs[1] + " is not registered.");
-//					continue;
-//				}
-//				friendNAmount.put(inputs[1], Integer.parseInt(inputs[2]));
 				addFriend(inputs, friendNAmount);
 				continue;
 				
@@ -142,6 +136,7 @@ public class MBWayController {
 		}
 	}
 	
+	// Refactor for Write Short Units of Code - line 140 to line 147
 	private Map<String, Integer> addFriend(String[] inputs, HashMap<String, Integer> friendNAmount) {
 		if (!model.isActive(inputs[1])) {
 			view.printUserMessage("Friend " + inputs[1] + " is not registered.");
