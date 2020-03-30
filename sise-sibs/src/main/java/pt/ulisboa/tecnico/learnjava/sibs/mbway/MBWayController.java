@@ -158,12 +158,7 @@ public class MBWayController {
 		} else if (totalAmount != sumAmounts) {
 			this.message = ("Something is wrong. Did you set the bill amount right?");
 		} else {
-			if (allHaveMoney(friendNAmount)) {
-				for (String friend : friendNAmount.keySet()) {
-					transferMbWay(friend, model.getPhoneNumber(), friendNAmount.get(friend));
-				}
-				this.message = ("Bill payed successfully!");
-			}
+			splitBillIfAllHaveMoney(friendNAmount);
 		}
 	}
 	
@@ -172,6 +167,15 @@ public class MBWayController {
 			this.message = ("Oh no! " + (numbFriends - friendSize) + " friend(s) are missing.");
 		} else {
 			this.message = ("Oh no! Too many friends.");
+		}
+	}
+	
+	private void splitBillIfAllHaveMoney(HashMap<String, Integer> friendNAmount) throws SibsException, AccountException, OperationException {
+		if (allHaveMoney(friendNAmount)) {
+			for (String friend : friendNAmount.keySet()) {
+				transferMbWay(friend, model.getPhoneNumber(), friendNAmount.get(friend));
+			}
+			this.message = ("Bill payed successfully!");
 		}
 	}
 
