@@ -31,9 +31,9 @@ public class CreateAccountMethodTest {
 	public void setUp() throws BankException, ClientException {
 		this.services = new Services();
 		this.bank = new Bank("CGD");
-		this.person = new Person("José", "Manuel", "Street");
+		this.person = new Person("José", "Manuel", "123456789", 33);
 
-		this.client = new Client(bank, person, "123456789", "987654321", 33);
+		this.client = new Client(this.bank, person, "987654321", "Street");
 	}
 
 	@Test
@@ -63,8 +63,8 @@ public class CreateAccountMethodTest {
 
 	@Test
 	public void successYoungAccount() throws BankException, AccountException, ClientException {
-		Person youngPerson = new Person("José", "Manuel", "Street");
-		Client youngClient = new Client(this.bank, youngPerson, "123456780", "987654321", 16);
+		Person youngPerson = new Person("José", "Manuel", "123456780", 16);
+		Client youngClient = new Client(this.bank, youngPerson, "987654321", "Street");
 		String iban = this.bank.createAccount(AccountType.YOUNG, youngClient, 100, 100);
 
 		Account account = this.services.getAccountByIban(iban);
@@ -78,8 +78,8 @@ public class CreateAccountMethodTest {
 
 	@Test
 	public void failYoungAccountMoreThan17() throws BankException, AccountException, ClientException {
-		Person notSoYoungPerson = new Person("José", "Manuel", "Street");
-		Client notSoYoungClient = new Client(this.bank, "José", "Manuel", "123456780", "987654321", "Street", 18);
+		Person notSoYoungPerson = new Person("José", "Manuel", "123456780", 18);
+		Client notSoYoungClient = new Client(this.bank, notSoYoungPerson, "987654321", "Street");
 
 		try {
 			this.bank.createAccount(AccountType.YOUNG, notSoYoungClient, 100, 100);
@@ -91,7 +91,8 @@ public class CreateAccountMethodTest {
 
 	@Test
 	public void failYoungAccountBaseNot10() throws BankException, AccountException, ClientException {
-		Client notSoYoungClient = new Client(this.bank, "José", "Manuel", "123456780", "987654321", "Street", 18);
+		Person notSoYoungPerson = new Person("José", "Manuel", "123456780", 18);
+		Client notSoYoungClient = new Client(this.bank, notSoYoungPerson, "987654321", "Street");
 
 		try {
 			this.bank.createAccount(AccountType.YOUNG, notSoYoungClient, 100, 100);

@@ -10,6 +10,7 @@ import org.junit.Test;
 
 import pt.ulisboa.tecnico.learnjava.bank.domain.Bank;
 import pt.ulisboa.tecnico.learnjava.bank.domain.Client;
+import pt.ulisboa.tecnico.learnjava.bank.domain.Person;
 import pt.ulisboa.tecnico.learnjava.bank.exceptions.AccountException;
 import pt.ulisboa.tecnico.learnjava.bank.exceptions.BankException;
 import pt.ulisboa.tecnico.learnjava.bank.exceptions.ClientException;
@@ -44,6 +45,8 @@ public class TransferOperationStateTests {
 	
 	private Bank sourceBank;
 	private Bank targetBank;
+	private Person sourcePerson;
+	private Person targetPerson;
 	private Client sourceClient;
 	private Client targetClientDiffBank;
 	private Client targetClientSameBank;
@@ -57,9 +60,11 @@ public class TransferOperationStateTests {
 		this.service = new Services();
 		this.sourceBank = new Bank("CGD");
 		this.targetBank = new Bank("BPI");
-		this.sourceClient = new Client(this.sourceBank, FIRST_NAME, LAST_NAME, NIF, PHONE_NUMBER, ADDRESS, AGE);
-		this.targetClientDiffBank = new Client(this.targetBank, FIRST_NAME_TWO, LAST_NAME_TWO, NIF_TWO, PHONE_NUMBER_TWO, ADDRESS_TWO, AGE_TWO);
-		this.targetClientSameBank = new Client(this.sourceBank, FIRST_NAME_TWO, LAST_NAME_TWO, NIF_TWO, PHONE_NUMBER_TWO, ADDRESS_TWO, AGE_TWO);
+		this.sourcePerson = new Person(FIRST_NAME, LAST_NAME, NIF, AGE);
+		this.sourceClient = new Client(this.sourceBank, this.sourcePerson, PHONE_NUMBER, ADDRESS);
+		this.targetPerson = new Person(FIRST_NAME_TWO, LAST_NAME_TWO, NIF_TWO, AGE_TWO);
+		this.targetClientDiffBank = new Client(this.targetBank, this.targetPerson, PHONE_NUMBER_TWO, ADDRESS_TWO);
+		this.targetClientSameBank = new Client(this.sourceBank, this.targetPerson, PHONE_NUMBER_TWO, ADDRESS_TWO);
 		this.sourceIban = this.sourceBank.createAccount(Bank.AccountType.CHECKING, this.sourceClient, VALUE, 0);
 		this.targetIbanDiffBank = this.targetBank.createAccount(Bank.AccountType.CHECKING, this.targetClientDiffBank, VALUE, 0);
 		this.targetIbanSameBank = this.sourceBank.createAccount(Bank.AccountType.CHECKING, this.targetClientSameBank, VALUE, 0);

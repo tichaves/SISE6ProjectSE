@@ -29,11 +29,11 @@ public class WithdrawMethodTest {
 	@Before
 	public void setUp() throws AccountException, BankException, ClientException {
 		Bank bank = new Bank("CGD");
-		Person person = new Person("José", "Manuel", "Street");
-		Person youngPerson = new Person("José", "Manuel", "Street");
+		Person person = new Person("José", "Manuel", "123456789", 33);
+		Person youngPerson = new Person("José", "Manuel", "123456780", 17);
 
-		Client client = new Client(bank, person, "123456789", "987654321", 33);
-		Client youngClient = new Client(bank, youngPerson, "123456780", "987654321", 17);
+		Client client = new Client(bank, person, "987654321", "Street");
+		Client youngClient = new Client(bank, youngPerson, "987654321", "Street");
 
 		this.checking = new CheckingAccount(client, 100);
 		this.savings = new SavingsAccount(client, 100, 10);

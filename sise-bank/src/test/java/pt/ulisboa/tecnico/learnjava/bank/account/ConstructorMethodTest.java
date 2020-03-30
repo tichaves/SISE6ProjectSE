@@ -27,8 +27,8 @@ public class ConstructorMethodTest {
 	@Before
 	public void setUp() throws BankException, ClientException {
 		this.bank = new Bank("CGD");
-		this.person = new Person("José", "Manuel", "Street");
-		this.client = new Client(this.bank, this.person, "123456789", "987654321", 33);
+		this.person = new Person("José", "Manuel", "123456789", 33);
+		this.client = new Client(this.bank, this.person, "987654321", "Street");
 	}
 
 	@Test

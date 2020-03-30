@@ -27,9 +27,9 @@ public class GetAccountIdMethodTest {
 	@Before
 	public void setUp() throws AccountException, ClientException, BankException {
 		Bank bank = new Bank("CGD");
-		Person person = new Person("José", "Manuel", "Street");
+		Person person = new Person("José", "Manuel", "123456789", 33);
 
-		Client client = new Client(bank, person, "123456789", "987654321", 33);
+		Client client = new Client(bank, person, "987654321", "Street");
 
 		this.checking = new CheckingAccount(client, 100);
 		this.savings = new SavingsAccount(client, 100, 10);

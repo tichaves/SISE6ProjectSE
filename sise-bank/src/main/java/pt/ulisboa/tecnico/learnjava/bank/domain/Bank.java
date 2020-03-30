@@ -130,7 +130,7 @@ public class Bank {
 	}
 
 	public Client getClientByNif(String nif) {
-		return this.clients.stream().filter(c -> c.getNif().equals(nif)).findFirst().orElse(null);
+		return this.clients.stream().filter(c -> c.getPerson().getNif().equals(nif)).findFirst().orElse(null);
 	}
 
 	public int getTotalNumberOfClients() {
@@ -155,11 +155,11 @@ public class Bank {
 		Services services = new Services();
 		Bank cgd = new Bank("CGD");
 		
-		Person personOne = new Person("José", "Manuel", "Street");
-		Person personTwo = new Person("José", "Manuel", "Street");
+		Person personOne = new Person("José", "Manuel", "123456789", 34);
+		Person personTwo = new Person("José", "Manuel", "133456789", 34);
 
-		Client clientOne = new Client(cgd, personOne, "123456789", "987654321", 34);
-		Client clientTwo = new Client(cgd, personTwo, "133456789", "987654321", 34);
+		Client clientOne = new Client(cgd, personOne, "987654321", "Street");
+		Client clientTwo = new Client(cgd, personTwo, "987654321", "Street");
 
 		cgd.createAccount(AccountType.CHECKING, clientOne, 100, 0);
 		String iban = cgd.createAccount(AccountType.CHECKING, clientTwo, 1000, 0);

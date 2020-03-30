@@ -12,6 +12,7 @@ import org.junit.Test;
 import pt.ulisboa.tecnico.learnjava.bank.domain.Bank;
 import pt.ulisboa.tecnico.learnjava.bank.domain.CheckingAccount;
 import pt.ulisboa.tecnico.learnjava.bank.domain.Client;
+import pt.ulisboa.tecnico.learnjava.bank.domain.Person;
 import pt.ulisboa.tecnico.learnjava.bank.domain.SalaryAccount;
 import pt.ulisboa.tecnico.learnjava.bank.domain.SavingsAccount;
 import pt.ulisboa.tecnico.learnjava.bank.domain.YoungAccount;
@@ -22,6 +23,8 @@ import pt.ulisboa.tecnico.learnjava.bank.services.Services;
 
 public class ExamTests {
 	private Bank bank;
+	private Person person;
+	private Person youngPerson;
 	private Client client;
 	private Client youngClient;
 	private CheckingAccount checking;
@@ -36,9 +39,12 @@ public class ExamTests {
 		this.services = new Services();
 		this.bank = new Bank("CGD");
 
-		this.client = new Client(this.bank, "José", "Manuel", "123456789", "987654321", "Street", 33);
-		Client otherClient = new Client(this.bank, "José", "Manuel", "023456789", "987654321", "Street", 33);
-		this.youngClient = new Client(this.bank, "José", "Manuel", "123456780", "987654321", "Street", 17);
+		this.person = new Person("José", "Manuel", "123456789", 33);
+		this.client = new Client(this.bank, this.person, "987654321", "Street");
+		Person otherPerson = new Person("José", "Manuel", "023456789", 33);
+		Client otherClient = new Client(this.bank, otherPerson, "987654321", "Street");
+		this.youngPerson = new Person("José", "Manuel", "123456780", 17);
+		this.youngClient = new Client(bank, this.youngPerson, "987654321", "Street");
 
 		this.checking = (CheckingAccount) this.services
 				.getAccountByIban(this.bank.createAccount(Bank.AccountType.CHECKING, this.client, 0, 0));

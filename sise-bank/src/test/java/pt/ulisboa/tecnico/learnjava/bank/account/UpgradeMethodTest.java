@@ -29,9 +29,9 @@ public class UpgradeMethodTest {
 	public void setUp() throws AccountException, ClientException, BankException {
 		this.services = new Services();
 		this.bank = new Bank("CGD");
-		this.youngPerson = new Person("José", "Manuel", "Street");
+		this.youngPerson = new Person("José", "Manuel", "123456780", 17);
 
-		this.youngClient = new Client(bank, youngPerson, "123456780", "987654321", 17);
+		this.youngClient = new Client(bank, youngPerson, "987654321", "Street");
 
 		this.young = (YoungAccount) this.services
 				.getAccountByIban(this.bank.createAccount(Bank.AccountType.YOUNG, this.youngClient, 100, 0));
@@ -41,7 +41,7 @@ public class UpgradeMethodTest {
 	public void success() throws BankException, AccountException, ClientException {
 		this.young.deposit(19_000);
 
-		this.youngClient.setAge(18);
+		this.youngClient.getPerson().increaseAge();
 		CheckingAccount checking = this.young.upgrade();
 
 		assertEquals(1, this.bank.getTotalNumberOfAccounts());
@@ -59,7 +59,7 @@ public class UpgradeMethodTest {
 		this.bank.createAccount(Bank.AccountType.YOUNG, this.youngClient, 100, 0);
 		this.bank.createAccount(Bank.AccountType.YOUNG, this.youngClient, 100, 0);
 
-		this.youngClient.setAge(18);
+		this.youngClient.getPerson().increaseAge();
 		CheckingAccount checking = this.young.upgrade();
 
 		assertEquals(5, this.bank.getTotalNumberOfAccounts());
