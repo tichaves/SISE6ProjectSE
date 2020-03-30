@@ -106,36 +106,64 @@ public class MBWayController {
 		if (!phoneNumber.equals(model.getPhoneNumber())) {
 			view.printUserMessage("The user phone number it is not correct!");
 		} else {
-			runfriends(phoneNumber, amount);
+			// Refactor for Write Short Units of Code - line 110 to line 118
+			Scanner myObj = new Scanner(System.in);
+			HashMap<String, Integer> friendNAmount = new HashMap<>();
+			friendNAmount.put(phoneNumber, amount);
+			view.printUserMessage("Enter your friends (split bill command to finish):");
+			boolean isTrue = true;
+			while(isTrue) {
+				String[] inputs = userInput(myObj.nextLine());;
+				isTrue = runFriends(inputs, friendNAmount);
+			}
 		}
 	}
 	
-	private void runfriends(String phoneNumber, int amount) throws NumberFormatException, SibsException, AccountException, OperationException {
-		Scanner myObj = new Scanner(System.in);
-		HashMap<String, Integer> friendNAmount = new HashMap<>();
-		friendNAmount.put(phoneNumber, amount);
-		view.printUserMessage("Enter your friends (split bill command to finish):");
-		boolean isTrue = true;
-		while(isTrue) {
-			String[] inputs = userInput(myObj.nextLine());;
-			switch(inputs[0]) {
-			case "friend":
-				if (!model.isActive(inputs[1])) {
-					view.printUserMessage("Friend " + inputs[1] + " is not registered.");
-					continue;
-				}
-				friendNAmount.put(inputs[1], Integer.parseInt(inputs[2]));
-				continue;
-				
-			case "mbway-split-bill":
-				splitBill(Integer.parseInt(inputs[1]), Integer.parseInt(inputs[2]), friendNAmount);
-				isTrue = false;
-				break;
-			
-			default:
-				view.printUserMessage("Wrong command.");
+//	private void runfriends(String phoneNumber, int amount) throws NumberFormatException, SibsException, AccountException, OperationException {
+//		Scanner myObj = new Scanner(System.in);
+//		HashMap<String, Integer> friendNAmount = new HashMap<>();
+//		friendNAmount.put(phoneNumber, amount);
+//		view.printUserMessage("Enter your friends (split bill command to finish):");
+//		boolean isTrue = true;
+//		while(isTrue) {
+//			String[] inputs = userInput(myObj.nextLine());;
+//			switch(inputs[0]) {
+//			case "friend":
+//				if (!model.isActive(inputs[1])) {
+//					view.printUserMessage("Friend " + inputs[1] + " is not registered.");
+//					continue;
+//				}
+//				friendNAmount.put(inputs[1], Integer.parseInt(inputs[2]));
+//				continue;
+//				
+//			case "mbway-split-bill":
+//				splitBill(Integer.parseInt(inputs[1]), Integer.parseInt(inputs[2]), friendNAmount);
+//				isTrue = false;
+//				break;
+//			
+//			default:
+//				view.printUserMessage("Wrong command.");
+//			}
+//		}
+//	}
+	
+	public boolean runFriends(String[] inputs, HashMap<String, Integer> friendNAmount) throws NumberFormatException, SibsException, AccountException, OperationException {
+		switch(inputs[0]) {
+		case "friend":
+			if (!model.isActive(inputs[1])) {
+				view.printUserMessage("Friend " + inputs[1] + " is not registered.");
+				return true;
 			}
+			friendNAmount.put(inputs[1], Integer.parseInt(inputs[2]));
+			return true;
 			
+		case "mbway-split-bill":
+			splitBill(Integer.parseInt(inputs[1]), Integer.parseInt(inputs[2]), friendNAmount);
+			return false;
+		
+		default:
+			view.printUserMessage("Wrong command.");
+			return true;
 		}
 	}
 
