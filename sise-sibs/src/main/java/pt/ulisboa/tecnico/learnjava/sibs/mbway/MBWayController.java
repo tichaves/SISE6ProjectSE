@@ -153,11 +153,13 @@ public class MBWayController {
 			sumAmounts += value;
 		}
 		friendNAmount.remove(model.getPhoneNumber());
+		// Refactor for Write Simple Units of Code - line 158
 		if (numbFriends != friendSize) {
 			friendsWrongSize(numbFriends, friendSize);
 		} else if (totalAmount != sumAmounts) {
 			this.message = ("Something is wrong. Did you set the bill amount right?");
 		} else {
+			// Refactor for Write Simple Units of Code - line 163
 			splitBillIfAllHaveMoney(friendNAmount);
 		}
 	}

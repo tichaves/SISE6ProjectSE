@@ -154,9 +154,12 @@ public class Bank {
 	public static void main(String[] args) throws BankException, AccountException, ClientException {
 		Services services = new Services();
 		Bank cgd = new Bank("CGD");
+		
+		Person personOne = new Person("José", "Manuel", "Street");
+		Person personTwo = new Person("José", "Manuel", "Street");
 
-		Client clientOne = new Client(cgd, "José", "Manuel", "123456789", "987654321", "Street", 34);
-		Client clientTwo = new Client(cgd, "José", "Manuel", "123456789", "987654321", "Street", 34);
+		Client clientOne = new Client(cgd, personOne, "123456789", "987654321", 34);
+		Client clientTwo = new Client(cgd, personTwo, "133456789", "987654321", 34);
 
 		cgd.createAccount(AccountType.CHECKING, clientOne, 100, 0);
 		String iban = cgd.createAccount(AccountType.CHECKING, clientTwo, 1000, 0);
