@@ -122,6 +122,7 @@ public class MBWayController {
 			String[] inputs = userInput(myObj.nextLine());;
 			switch(inputs[0]) {
 			case "friend":
+				// Refactor for Write Short Units of Code - line 140 to line 147
 				addFriend(inputs, friendNAmount);
 				continue;
 				

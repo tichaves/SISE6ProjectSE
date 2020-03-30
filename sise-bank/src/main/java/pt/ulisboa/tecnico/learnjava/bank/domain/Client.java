@@ -16,7 +16,7 @@ public class Client {
 	private final String phoneNumber;
 	private final String address;
 	
-	// Refactor for Keep Unit Interfaces Small - all Person class and line 46
+	// Refactor for Keep Unit Interfaces Small - all Person class and line 22
 	public Client(Bank bank, Person person, String phoneNumber, String address)
 			throws ClientException {
 		checkParameters(bank, person, phoneNumber);
