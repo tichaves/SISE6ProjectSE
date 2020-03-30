@@ -153,31 +153,42 @@ public class MBWayController {
 			sumAmounts += value;
 		}
 		friendNAmount.remove(model.getPhoneNumber());
-		if (numbFriends != friendSize) {
-			friendsWrongSize(numbFriends, friendSize);
+//		if (numbFriends != friendSize) {
+//			friendsWrongSize(numbFriends, friendSize);
+		if (numbFriends > friendSize) {
+			this.message = ("Oh no! " + (numbFriends - friendSize) + " friend(s) are missing.");
+		} else if ((numbFriends > friendSize)) {
+			this.message = ("Oh no! Too many friends.");
+		
 		} else if (totalAmount != sumAmounts) {
 			this.message = ("Something is wrong. Did you set the bill amount right?");
 		} else {
-			splitBillIfAllHaveMoney(friendNAmount);
-		}
-	}
-	
-	private void friendsWrongSize(int numbFriends, int friendSize) {
-		if (numbFriends > friendSize) {
-			this.message = ("Oh no! " + (numbFriends - friendSize) + " friend(s) are missing.");
-		} else {
-			this.message = ("Oh no! Too many friends.");
-		}
-	}
-	
-	private void splitBillIfAllHaveMoney(HashMap<String, Integer> friendNAmount) throws SibsException, AccountException, OperationException {
-		if (allHaveMoney(friendNAmount)) {
-			for (String friend : friendNAmount.keySet()) {
-				transferMbWay(friend, model.getPhoneNumber(), friendNAmount.get(friend));
+//			splitBillIfAllHaveMoney(friendNAmount);
+			if (allHaveMoney(friendNAmount)) {
+				for (String friend : friendNAmount.keySet()) {
+					transferMbWay(friend, model.getPhoneNumber(), friendNAmount.get(friend));
+				}
+				this.message = ("Bill payed successfully!");
 			}
-			this.message = ("Bill payed successfully!");
 		}
 	}
+	
+//	private void friendsWrongSize(int numbFriends, int friendSize) {
+//		if (numbFriends > friendSize) {
+//			this.message = ("Oh no! " + (numbFriends - friendSize) + " friend(s) are missing.");
+//		} else {
+//			this.message = ("Oh no! Too many friends.");
+//		}
+//	}
+	
+//	private void splitBillIfAllHaveMoney(HashMap<String, Integer> friendNAmount) throws SibsException, AccountException, OperationException {
+//		if (allHaveMoney(friendNAmount)) {
+//			for (String friend : friendNAmount.keySet()) {
+//				transferMbWay(friend, model.getPhoneNumber(), friendNAmount.get(friend));
+//			}
+//			this.message = ("Bill payed successfully!");
+//		}
+//	}
 
 	private boolean allHaveMoney(HashMap<String, Integer> friendNAmount) {
 		for (String friend : friendNAmount.keySet()) {
