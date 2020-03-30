@@ -15,43 +15,37 @@ public class Client {
 	private Person person;
 //	private final String firstName;
 //	private final String lastName;
-	private final String nif;
+//	private final String nif;
 	private final String phoneNumber;
-//	private final String address;
-	private int age;
+	private final String address;
+//	private int age;
 
 //	public Client(Bank bank, String firstName, String lastName, String nif, String phoneNumber, String address, int age)
 //			throws ClientException {
-	public Client(Bank bank, Person person, String nif,String phoneNumber, int age)
+	public Client(Bank bank, Person person, String phoneNumber, String address)
 			throws ClientException {
-		checkParameters(bank, nif, phoneNumber, age);
-
+//		checkParameters(bank, nif, phoneNumber, age);
+		checkParameters(bank, person, phoneNumber);
+		
 		this.bank = bank;
 		this.person = person;
 //		this.firstName = firstName;
 //		this.lastName = lastName;
-		this.nif = nif;
+//		this.nif = nif;
 		this.phoneNumber = phoneNumber;
-//		this.address = address;
-		this.age = age;
+		this.address = address;
+//		this.age = age;
 
 		bank.addClient(this);
 	}
 
-	private void checkParameters(Bank bank, String nif, String phoneNumber, int age) throws ClientException {
-		if (age < 0) {
-			throw new ClientException();
-		}
-
-		if (nif.length() != 9 || !nif.matches("[0-9]+")) {
-			throw new ClientException();
-		}
-
+	private void checkParameters(Bank bank, Person person, String phoneNumber) throws ClientException {
+		
 		if (phoneNumber.length() != 9 || !phoneNumber.matches("[0-9]+")) {
 			throw new ClientException();
 		}
 
-		if (bank.getClientByNif(nif) != null) {
+		if (bank.getClientByNif(person.getNif()) != null) {
 			throw new ClientException();
 		}
 	}
@@ -81,9 +75,9 @@ public class Client {
 	}
 
 	public void happyBirthDay() throws BankException, AccountException, ClientException {
-		this.age++;
+		this.person.increaseAge();
 
-		if (this.age == 18) {
+		if (this.person.getAge() == 18) {
 			Set<Account> accounts = new HashSet<Account>(this.accounts);
 			for (Account account : accounts) {
 				YoungAccount youngAccount = (YoungAccount) account;
@@ -116,24 +110,24 @@ public class Client {
 //		return this.lastName;
 //	}
 //
-	public String getNif() {
-		return this.nif;
-	}
+//	public String getNif() {
+//		return this.nif;
+//	}
 
 	public String getPhoneNumber() {
 		return this.phoneNumber;
 	}
 
-//	public String getAddress() {
-//		return this.address;
+	public String getAddress() {
+		return this.address;
+	}
+
+//	public int getAge() {
+//		return this.age;
 //	}
-
-	public int getAge() {
-		return this.age;
-	}
-
-	public void setAge(int age) {
-		this.age = age;
-	}
+//
+//	public void setAge(int age) {
+//		this.age = age;
+//	}
 
 }
