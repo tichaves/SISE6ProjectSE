@@ -40,18 +40,9 @@ public class MBWayInterface {
 		myObj.close();
 	}
 	
-	// Refactor for Write Short Units of Code - line 55
+	// Refactor for Write Short Units of Code - line 46
 	private static void retriveDataFromDatabase() throws BankException, ClientException, AccountException {
 		Bank bank = new Bank("cgd");
-//		Person myPerson = new Person("Eu", "Pessoa", "212121314", 29);
-//		Person person1 = new Person("Bonifacio", "Jacobino", "123456789", 24);
-//		Person person2 = new Person("Aquilino", "Andarilho", "012345678", 29);
-//		Person person3 = new Person("Felizmino", "Tristemino", "233223323", 25);
-//		
-//		Client eu = new Client(bank, myPerson, "999999999", "Viaduto Duarte Pacheco");
-//		Client client1 = new Client(bank, "966696669", "Algures perdido");
-//		Client client2 = new Client(bank, "933393336", "Algures procurando");
-//		Client client3 = new Client(bank, "965432198", "Rua d'Ele");
 		Client[] clients = createClients(bank,createPersons());
 		String iban = bank.createAccount(AccountType.CHECKING, clients[0], 1000, 1000);
 		String iban1 = bank.createAccount(AccountType.CHECKING, clients[1], 1000, 1000);

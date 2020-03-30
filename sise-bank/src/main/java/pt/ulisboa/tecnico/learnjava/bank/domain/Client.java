@@ -13,28 +13,18 @@ public class Client {
 
 	private final Bank bank;
 	private Person person;
-//	private final String firstName;
-//	private final String lastName;
-//	private final String nif;
 	private final String phoneNumber;
 	private final String address;
-//	private int age;
-
-//	public Client(Bank bank, String firstName, String lastName, String nif, String phoneNumber, String address, int age)
-//			throws ClientException {
+	
+	// Refactor for Keep Unit Interfaces Small - all Person class and line 46
 	public Client(Bank bank, Person person, String phoneNumber, String address)
 			throws ClientException {
-//		checkParameters(bank, nif, phoneNumber, age);
 		checkParameters(bank, person, phoneNumber);
 		
 		this.bank = bank;
 		this.person = person;
-//		this.firstName = firstName;
-//		this.lastName = lastName;
-//		this.nif = nif;
 		this.phoneNumber = phoneNumber;
 		this.address = address;
-//		this.age = age;
 
 		bank.addClient(this);
 	}
@@ -102,18 +92,6 @@ public class Client {
 		return person;
 	}
 
-	//	public String getFirstName() {
-//		return this.firstName;
-//	}
-//
-//	public String getLastName() {
-//		return this.lastName;
-//	}
-//
-//	public String getNif() {
-//		return this.nif;
-//	}
-
 	public String getPhoneNumber() {
 		return this.phoneNumber;
 	}
@@ -121,13 +99,5 @@ public class Client {
 	public String getAddress() {
 		return this.address;
 	}
-
-//	public int getAge() {
-//		return this.age;
-//	}
-//
-//	public void setAge(int age) {
-//		this.age = age;
-//	}
 
 }
